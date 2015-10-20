@@ -1,54 +1,40 @@
 package com.example.android.moviesaroundtheclock;
 
 import android.content.Intent;
-import android.preference.PreferenceManager;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity  extends ActionBarActivity implements MovieFragment.Callback {
 
-    static public CustomMovieAdapter arrAdapter;
-
+    private boolean mTwoPane;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        GridView moviesList = (GridView)findViewById(R.id.movies_gridview);
-        ArrayList<Movie> movieList = new ArrayList<Movie>();
-        Movie m = new Movie();
-        movieList.add(m);
-
-        arrAdapter= new CustomMovieAdapter(getApplicationContext(),R.id.movieitem_imageview, movieList);
-        moviesList.setAdapter(arrAdapter);
-        updateMovieList();
-
-        moviesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), MovieDetails.class);
-                intent.putExtra("Title", arrAdapter.getItem(position).getmTitle());
-                intent.putExtra("Overview", arrAdapter.getItem(position).getmOverview());
-                intent.putExtra("Release", arrAdapter.getItem(position).getmReleaseDate());
-                intent.putExtra("Average", arrAdapter.getItem(position).getmVoteAverage());
-                intent.putExtra("Poster", arrAdapter.getItem(position).getmPoster());
-                startActivity(intent);
+       if (findViewById(R.id.movie_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            mTwoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, new DetailsFragment())
+                        .commit();
             }
-        });
+        } else {
+            mTwoPane = false;
+        }
+
+       // MovieFragment movieF = (MovieFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
+
+        //TODO : why is there a syncAdapter here in sunshine?!!
     }
 
     @Override
@@ -76,15 +62,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        updateMovieList();    }
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable("URI", contentUri);
 
-    private void updateMovieList() {
-        String sortby = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.movie_sort_key), getString(R.string.movie_sort_default));
-        FetchMovieTask asyncTask = new FetchMovieTask() ;
-        asyncTask.execute(sortby);
-        return ;
+            DetailsFragment fragment = new DetailsFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailsActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
+        }
     }
 
 }

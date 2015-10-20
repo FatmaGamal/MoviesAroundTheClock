@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 public class PreferencesActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
 
-    //public static String location ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,6 @@ public class PreferencesActivity extends PreferenceActivity
         } else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
-            //location = stringValue;
         }
         return true;
     }

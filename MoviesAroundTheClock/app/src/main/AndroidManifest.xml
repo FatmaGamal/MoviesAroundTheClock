@@ -5,6 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <permission
+        android:name="com.example.android.moviesaroundtheclock.LICENSE_TO_KILL"
+        android:label="Licensed to Kill"
+        android:protectionLevel="dangerous" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,13 +33,20 @@
                 android:value="com.example.android.moviesaroundtheclock.MainActivity" />
         </activity>
         <activity
-            android:name=".MovieDetails"
+            android:name=".DetailsActivity"
             android:label="@string/title_activity_movie_details"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.moviesaroundtheclock.MainActivity" />
         </activity>
+
+        <provider
+            android:name="com.example.android.moviesaroundtheclock.Data.MoviesProvider"
+            android:authorities="com.example.android.moviesaroundtheclock"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>
