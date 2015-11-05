@@ -3,6 +3,7 @@ package com.example.android.moviesaroundtheclock.AdaptersAndParser;
 import android.content.ContentValues;
 import android.util.Log;
 
+import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Extra;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Movie;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Review;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Trailer;
@@ -24,10 +25,11 @@ public class MovieDataParser {
     static final String LOG_TAG = MovieDataParser.class.getSimpleName();
 
 
-    protected static Void getMovieDataFromJson(String movieJsonStr)
+    protected static Void getMovieDataFromJson(String movieJsonStr, String sortby)
             throws JSONException, ParseException {
 
         //Log.v("Parser from Fetch", movieJsonStr);
+
 
         final String M_RESULTS = "results";
         final String M_OVERVIEW = "overview";
@@ -42,7 +44,7 @@ public class MovieDataParser {
 
         //Log.v("Parse movieArray.toSt", movieArray.toString());
 
-        ArrayList<Movie> resultStrs = new ArrayList<Movie>();
+        ArrayList<Movie> movieResultStrs = new ArrayList<Movie>();
         for (int i = 0; i < movieArray.length(); i++) {
             String title;
             String overview;
@@ -69,78 +71,74 @@ public class MovieDataParser {
             m.setmReleaseDate(release_date);
             m.setmPoster(poster);
             m.setmId(id);
-            resultStrs.add(m);
-
-            FetchMovieTask task = new FetchMovieTask(id, "trailers");
-            task.execute();
-            task = new FetchMovieTask(id, "reviews");
-            task.execute();
+            movieResultStrs.add(m);
 
             Vector<ContentValues> cVVector = new Vector<ContentValues>(movieArray.length());
             ContentValues movieValues = new ContentValues();
-            switch (DetailsFragment.sortby) {
-                case "Most Popular": {
-                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_MOVIE_ID, m.getmId());
-                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_TITLE, m.getmTitle());
-                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_POSTER_PATH, m.getmPoster());
-                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_OVERVIEW, m.getmOverview());
-                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_AVERAGE_VOTE, m.getmVoteAverage());
+            switch (sortby) {
+                case MoviesContract.POPULARITY: {
                     movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_RELEASE_DATE, m.getmReleaseDate());
+                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_MOVIE_ID, m.getmId());
+                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_AVERAGE_VOTE, m.getmVoteAverage());
+                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_POSTER_PATH, m.getmPoster());
+                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_TITLE, m.getmTitle());
+                    movieValues.put(MoviesContract.PopularMovieEntry.COLUMN_OVERVIEW, m.getmOverview());
                     break;
                 }
-                case "Highest-Rated": {
+                case MoviesContract.HIGHEST_RATED: {
+                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_RELEASE_DATE, m.getmReleaseDate());
                     movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_MOVIE_ID, m.getmId());
-                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_TITLE, m.getmTitle());
-                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_POSTER_PATH, m.getmPoster());
-                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_OVERVIEW, m.getmOverview());
                     movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_AVERAGE_VOTE, m.getmVoteAverage());
-                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_RELEASE_DATE, m.getmVoteAverage());
+                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_POSTER_PATH, m.getmPoster());
+                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_TITLE, m.getmTitle());
+                    movieValues.put(MoviesContract.MovieRatingsEntry.COLUMN_OVERVIEW, m.getmOverview());
                     break;
                 }
             }
             cVVector.add(movieValues);
 
-            int inserted = 0;
-            if (cVVector.size() > 0) {
-                ContentValues[] cVArray = new ContentValues[cVVector.size()];
-                cVVector.toArray(cVArray);
-                switch (DetailsFragment.sortby) {
-                    case "Most Popular": {
-                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.MovieRatingsEntry.CONTENT_URI, cVArray);
-                        break;
-                    }
-                    case "Highest-Rated": {
-                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.MovieRatingsEntry.CONTENT_URI, cVArray);
-                        break;
-                    }
-                }
-                Log.d("grid", "FetchMoviesTask complete " + inserted + " inserted");
-            }
+//
+//            int inserted = 0;
+//            if (cVVector.size() > 0) {
+//                ContentValues[] cVArray = new ContentValues[cVVector.size()];
+//                cVVector.toArray(cVArray);
+//                switch (sortby) {
+//                    case MoviesContract.POPULARITY: {
+//                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.PopularMovieEntry.CONTENT_URI, cVArray);
+//                        break;
+//                    }
+//                    case MoviesContract.HIGHEST_RATED: {
+//                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.MovieRatingsEntry.CONTENT_URI, cVArray);
+//                        break;
+//                    }
+//                }
+//                Log.d("grid", "FetchMoviesTask complete " + inserted + " inserted");
+//            }
         }
         return null;
     }
 
-    protected static ArrayList<Trailer> getTrailersDataFromJson(String trailerJsonStr)
+    protected static ArrayList<Extra> getTrailersDataFromJson(String trailerJsonStr)
             throws JSONException, ParseException {
 
 
         //Log.v("Parser from Fetch", movieJsonStr);
 
-        final String T_RESULTS = "results";
-        final String T_KEY = "key";
+        final String T_RESULTS = "youtube";
+        final String T_KEY = "source";
         final String T_NAME = "name";
-        final String T_ID = "id";
+        //final String T_ID = "id";
 
         JSONObject trailerJson = new JSONObject(trailerJsonStr);
         JSONArray trailerArray = trailerJson.getJSONArray(T_RESULTS);
 
         //Log.v("Parse movieArray.toSt", movieArray.toString());
 
-        ArrayList<Trailer> resultStrs = new ArrayList<Trailer>();
+        ArrayList<Extra> trailerResultStrs = new ArrayList<Extra>();
         for (int i = 0; i < trailerArray.length(); i++) {
             String name;
             String key;
-            Long id;
+            //Long id;
 
             JSONObject trailerItem = trailerArray.getJSONObject(i);
 
@@ -148,20 +146,21 @@ public class MovieDataParser {
 
             name = trailerItem.getString(T_NAME);
             key = trailerItem.getString(T_KEY);
-            id = trailerItem.getLong(T_ID);
+            //id = trailerItem.getLong(T_ID);
 
-            Trailer t = new Trailer();
+            Extra t = new Trailer();
             t.settName(name);
             t.settKey(key);
-            t.settId(id);
-            resultStrs.add(t);
+            //t.settId(id);
+            trailerResultStrs.add(t);
         }
 
-        return resultStrs;
+        //DetailsFragment.trailers = trailerResultStrs;
+        return trailerResultStrs;
 
     }
 
-    protected static ArrayList<Review> getReviewsDataFromJson(String reviewJsonStr)
+    protected static ArrayList<Extra> getReviewsDataFromJson(String reviewJsonStr)
             throws JSONException, ParseException {
 
         //Log.v("Parser from Fetch", movieJsonStr);
@@ -170,17 +169,19 @@ public class MovieDataParser {
         final String R_ID = "id";
         final String R_AUTHOR = "author";
         final String R_BODY = "content";
+        final String R_URL = "url";
 
         JSONObject reviewJson = new JSONObject(reviewJsonStr);
         JSONArray reviewArray = reviewJson.getJSONArray(R_RESULTS);
 
         //Log.v("Parse movieArray.toSt", movieArray.toString());
 
-        ArrayList<Review> resultStrs = new ArrayList<Review>();
+        ArrayList<Extra> reviewResultStrs = new ArrayList<Extra>();
         for (int i = 0; i < reviewArray.length(); i++) {
             String author;
             String body;
-            Long id;
+            String url;
+            String id;
 
             JSONObject reviewItem = reviewArray.getJSONObject(i);
 
@@ -188,16 +189,19 @@ public class MovieDataParser {
 
             author = reviewItem.getString(R_AUTHOR);
             body = reviewItem.getString(R_BODY);
-            id = reviewItem.getLong(R_ID);
+            id = reviewItem.getString(R_ID);
+            url = reviewItem.getString(R_URL);
 
-            Review r = new Review();
+            Extra r = new Review();
             r.setrAuthor(author);
             r.setrBody(body);
             r.setrId(id);
-            resultStrs.add(r);
+            r.setrUrl(url);
+            reviewResultStrs.add(r);
         }
 
-        return resultStrs;
+        //DetailsFragment.reviews = reviewResultStrs;
+        return reviewResultStrs;
 
     }
 

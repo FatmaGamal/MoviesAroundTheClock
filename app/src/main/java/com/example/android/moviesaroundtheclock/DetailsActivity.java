@@ -2,27 +2,34 @@ package com.example.android.moviesaroundtheclock;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class DetailsActivity extends ActionBarActivity {
 
-
-    //private MovieAdapter mMovieAdapter;
-    //private static final int MOVIES_LOADER = 0;
-    //private String sortby = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(getString(R.string.movie_sort_key), getString(R.string.movie_sort_default));
-    //String mMoviesStr;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_movie_details);
+        setContentView(R.layout.activity_details);
         if (savedInstanceState == null) {
 
             Bundle arguments = new Bundle();
-            arguments.putParcelable("URI", getIntent().getData());
+            arguments.putParcelable(DetailsFragment.URI_ARG, getIntent().getData());
 
+            Boolean isFavBoolean;
+            Bundle extras = getIntent().getExtras();
+            if(extras == null){
+                isFavBoolean = false;
+            }else{
+                isFavBoolean = extras.getBoolean(DetailsFragment.FAV_ARG);
+            }
+            if(isFavBoolean != null){
+                arguments.putBoolean(DetailsFragment.FAV_ARG, isFavBoolean);
+            }
+
+            Log.v("DetailsActivity", "data received and put as arguments for details fragment");
             DetailsFragment fragment = new DetailsFragment();
             fragment.setArguments(arguments);
 

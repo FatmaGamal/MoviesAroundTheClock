@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Extra;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Review;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Trailer;
 import com.example.android.moviesaroundtheclock.R;
@@ -16,13 +17,13 @@ import java.util.ArrayList;
 /**
  * Created by FATMA on 22-Aug-15.
  */
-public class ReviewsAdapter extends ArrayAdapter<Review> {
+public class ReviewsAdapter extends ArrayAdapter<Extra> {
 
     public Context context;
-    public ArrayList<Review> reviews;
+    public ArrayList<Extra> reviews;
 
 
-    public ReviewsAdapter(Context context, int viewResourceId, ArrayList<Review> reviews) {
+    public ReviewsAdapter(Context context, int viewResourceId, ArrayList<Extra> reviews) {
         super(context, viewResourceId, reviews);
         this.context = context;
         this.reviews = reviews;
@@ -35,13 +36,12 @@ public class ReviewsAdapter extends ArrayAdapter<Review> {
 
     @Override
     public Review getItem(int position) {
-        return reviews.get(position);
+        return (Review)reviews.get(position);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        int type = getItemViewType(position);
 
         View recycledView = convertView;
         ViewHolderItem holder;
@@ -53,6 +53,7 @@ public class ReviewsAdapter extends ArrayAdapter<Review> {
             holder = new ViewHolderItem();
             holder.author = (TextView)recycledView.findViewById(R.id.review_author_textview);
             holder.review = (TextView)recycledView.findViewById(R.id.review_body_textview);
+            holder.url = (TextView)recycledView.findViewById(R.id.review_url_textview);
             recycledView.setTag(holder);
         }
 
@@ -60,6 +61,8 @@ public class ReviewsAdapter extends ArrayAdapter<Review> {
         if (r != null) {
             holder.author.setText(r.getrAuthor());
             holder.review.setText(r.getrBody());
+            holder.url.setText(r.getrUrl());
+
         }
 
         return recycledView;
@@ -69,6 +72,8 @@ public class ReviewsAdapter extends ArrayAdapter<Review> {
     public static class ViewHolderItem {
         TextView author;
         TextView review;
+        TextView url;
+
     }
 
 

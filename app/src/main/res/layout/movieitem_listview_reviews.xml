@@ -13,4 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/review_author_textview" />
+
+    <TextView
+        android:id="@+id/review_url_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/review_body_textview" />
 </RelativeLayout>

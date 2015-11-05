@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Extra;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Movie;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Trailer;
 import com.example.android.moviesaroundtheclock.R;
@@ -19,13 +20,13 @@ import java.util.ArrayList;
 /**
  * Created by FATMA on 22-Aug-15.
  */
-public class TrailersAdapter extends ArrayAdapter<Trailer> {
+public class TrailersAdapter extends ArrayAdapter<Extra> {
 
     public Context context;
-    public ArrayList<Trailer> trailers;
+    public ArrayList<Extra> trailers;
 
 
-    public TrailersAdapter(Context context, int viewResourceId, ArrayList<Trailer> trailers) {
+    public TrailersAdapter(Context context, int viewResourceId, ArrayList<Extra> trailers) {
         super(context, viewResourceId, trailers);
         this.context = context;
         this.trailers = trailers;
@@ -38,13 +39,11 @@ public class TrailersAdapter extends ArrayAdapter<Trailer> {
 
     @Override
     public Trailer getItem(int position) {
-        return trailers.get(position);
+        return (Trailer)trailers.get(position);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        int type = getItemViewType(position);
 
         View recycledView = convertView;
         ViewHolderItem holder;

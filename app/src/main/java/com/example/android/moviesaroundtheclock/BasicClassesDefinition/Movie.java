@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by FATMA on 07-Sep-15.
  */
-public class Movie {
+public class Movie{
 
     private Long mId;
     private String mTitle;

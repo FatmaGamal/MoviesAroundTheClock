@@ -16,6 +16,11 @@ public class MoviesContract {
     public static final String PATH_RATING = "RATED_MOVIES";
     public static final String PATH_FAV = "FAVOURITE_MOVIES";
 
+    public static final String HIGHEST_RATED = "vote_average.desc";
+    public static final String POPULARITY = "popularity.desc";
+    public static final String FAVORITE = "favourite";
+
+
     /* Inner class that defines the table contents of the Highest-Rated Movies table */
     public static final class MovieRatingsEntry implements BaseColumns {
 
@@ -34,9 +39,6 @@ public class MoviesContract {
         public static final String COLUMN_AVERAGE_VOTE = "vote";
         public static final String COLUMN_POSTER_PATH = "poster";
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_TRAILERS = "trailer";
-        public static final String COLUMN_REVIEWS = "review";
-        //public static final String COLUMN_IS_FAVOURITE = "favourite";
 
 
         public static Uri buildCertainMovieUri(long id) {
@@ -52,8 +54,8 @@ public class MoviesContract {
         public static int getMovieIDFromUri(Uri uri){
             return Integer.parseInt(uri.getPathSegments().get(1));
         }
-/*
-        public static long getMovieIDFromUri(Uri uri){
+
+       /* public static long getMovieIDFromUri(Uri uri){
             return ContentUris.parseId(uri);
         }*/
     }
@@ -72,14 +74,12 @@ public class MoviesContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_POPULAR;
 
         public static final String TABLE_NAME = "POPULAR_MOVIES";
+        public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_RELEASE_DATE = "date";
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_AVERAGE_VOTE = "vote";
         public static final String COLUMN_POSTER_PATH = "poster";
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_TRAILERS = "trailer";
-        public static final String COLUMN_REVIEWS = "review";
         //public static final String COLUMN_IS_FAVOURITE = "isfavourite";
 
 
@@ -111,14 +111,12 @@ public class MoviesContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAV;
 
         public static final String TABLE_NAME = "FAVOURITE_MOVIES";
+        public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_RELEASE_DATE = "date";
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_AVERAGE_VOTE = "vote";
         public static final String COLUMN_POSTER_PATH = "poster";
         public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_TRAILERS = "trailer";
-        public static final String COLUMN_REVIEWS = "review";
 
 
         public static Uri buildCertainMovieUri(long id) {

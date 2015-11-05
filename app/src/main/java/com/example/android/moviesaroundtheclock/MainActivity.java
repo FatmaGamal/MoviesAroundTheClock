@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,12 +14,16 @@ public class MainActivity  extends ActionBarActivity implements MovieFragment.Ca
     private boolean mTwoPane;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v("MainActivity", "start");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.v("MainActivity", "Layout shown");
        if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
             // (res/layout-sw600dp). If this view is present, then the activity should be
             // in two-pane mode.
+
+           Log.v("MainActivity", "TwoPane = true");
             mTwoPane = true;
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -30,11 +35,9 @@ public class MainActivity  extends ActionBarActivity implements MovieFragment.Ca
             }
         } else {
             mTwoPane = false;
+
+           Log.v("MainActivity", "TwoPane = false");
         }
-
-       // MovieFragment movieF = (MovieFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
-
-        //TODO : why is there a syncAdapter here in sunshine?!!
     }
 
     @Override
@@ -51,7 +54,6 @@ public class MainActivity  extends ActionBarActivity implements MovieFragment.Ca
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent i = new Intent(getApplicationContext(), PreferencesActivity.class);
             startActivity(i);
@@ -62,13 +64,14 @@ public class MainActivity  extends ActionBarActivity implements MovieFragment.Ca
     }
 
     @Override
-    public void onItemSelected(Uri contentUri) {
+    public void onItemSelected(Uri contentUri, Boolean favBoolean) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle args = new Bundle();
-            args.putParcelable("URI", contentUri);
+            args.putParcelable(DetailsFragment.URI_ARG, contentUri);
+            args.putBoolean(DetailsFragment.FAV_ARG, favBoolean);
 
             DetailsFragment fragment = new DetailsFragment();
             fragment.setArguments(args);
@@ -76,9 +79,13 @@ public class MainActivity  extends ActionBarActivity implements MovieFragment.Ca
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment)
                     .commit();
+
+            Log.v("MainActivity", "putting args for details fragment");
+
         } else {
-            Intent intent = new Intent(this, DetailsActivity.class)
-                    .setData(contentUri);
+            Intent intent = new Intent(this, DetailsActivity.class).setData(contentUri);
+            intent.putExtra(DetailsFragment.FAV_ARG, favBoolean);
+            Log.v("MainActivity", "putting args for detailsActivity in intent");
             startActivity(intent);
         }
     }

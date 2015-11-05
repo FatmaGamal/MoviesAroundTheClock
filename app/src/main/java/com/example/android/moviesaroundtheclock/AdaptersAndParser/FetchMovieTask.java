@@ -8,9 +8,13 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Extra;
 import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Movie;
+import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Review;
+import com.example.android.moviesaroundtheclock.BasicClassesDefinition.Trailer;
 import com.example.android.moviesaroundtheclock.Data.MoviesContract;
 import com.example.android.moviesaroundtheclock.DetailsFragment;
+import com.example.android.moviesaroundtheclock.MainActivity;
 import com.example.android.moviesaroundtheclock.MovieFragment;
 
 import org.json.JSONException;
@@ -27,7 +31,7 @@ import java.util.ArrayList;
 /**
  * Created by FATMA on 07-Sep-15.
  */
-public class FetchMovieTask extends AsyncTask<String, Void, Void> {
+public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Extra>> {
     HttpURLConnection urlConnection = null;
     BufferedReader reader = null;
 
@@ -52,9 +56,25 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected void onPostExecute(ArrayList<Extra> extras) {
+        if (!extras.isEmpty()) {
+            if (extras.get(0) instanceof Trailer) {
+                DetailsFragment.trailers.clear();
+                DetailsFragment.trailers.addAll(extras);
+                DetailsFragment.trailerAdapter.notifyDataSetChanged();
+            } else if (extras.get(0) instanceof Review) {
+                DetailsFragment.reviews.clear();
+                DetailsFragment.reviews.addAll(extras);
+                DetailsFragment.reviewAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    protected ArrayList<Extra> doInBackground(String... params) {
         final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 
+        Log.v("FetchMovieTask", "params.length = " + params.length);
         if (params.length == 0) {
             params[0] = "@string/movie_sort_default";
         }
@@ -75,6 +95,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
             URL url;
             switch (type) {
                 case "reviews": {
+                    Log.v("FetchMovieTask", "reviews : building uri");
                     builtUri = Uri.parse(CERTAIN_MOVIE_BASE_URL).buildUpon()
                             .appendPath(movieId)
                             .appendPath(REVIEWS_PARAM)
@@ -87,6 +108,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                     break;
                 }
                 case "trailers": {
+                    Log.v("FetchMovieTask", "trailers : building uri");
                     builtUri = Uri.parse(CERTAIN_MOVIE_BASE_URL).buildUpon()
                             .appendPath(movieId)
                             .appendPath(TRAILERS_PARAM)
@@ -99,6 +121,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
                     break;
                 }
                 default: {
+                    Log.v("FetchMovieTask", "movie : building base uri");
                     builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                             .appendQueryParameter(QUERY_PARAM, params[0])
                             .appendQueryParameter(KEY_PARAM, API_KEY)
@@ -148,12 +171,21 @@ public class FetchMovieTask extends AsyncTask<String, Void, Void> {
         }
         try {
             switch (type) {
-                case "trailers":
-                DetailsFragment.trailers = MovieDataParser.getTrailersDataFromJson(moviesJsonStr);
-                case "reviews":
-                DetailsFragment.reviews = MovieDataParser.getReviewsDataFromJson(moviesJsonStr);
-                default:
-                    MovieDataParser.getMovieDataFromJson(moviesJsonStr);
+                case "trailers": {
+                    Log.v("FetchMovieTask", "trailers : getting Data");
+                    /*DetailsFragment.trailers = */
+                    return MovieDataParser.getTrailersDataFromJson(moviesJsonStr);
+                }
+                case "reviews": {
+                    Log.v("FetchMovieTask", "reviews : getting data");
+                    /*DetailsFragment.reviews = */
+                    return MovieDataParser.getReviewsDataFromJson(moviesJsonStr);
+                }
+                default: {
+                    Log.v("FetchMovieTask", "movie : getting data");
+                    MovieDataParser.getMovieDataFromJson(moviesJsonStr, params[0]);
+                    return new ArrayList<Extra>();
+                }
             }
         } catch (ParseException e) {
             e.printStackTrace();

@@ -3,7 +3,7 @@ package com.example.android.moviesaroundtheclock.BasicClassesDefinition;
 /**
  * Created by FATMA on 20-Oct-15.
  */
-public class Trailer {
+public class Trailer extends Extra{
     Long tId;
     String tKey;
     String tName;
@@ -22,6 +22,26 @@ public class Trailer {
 
     public void settKey(String tKey) {
         this.tKey = tKey;
+    }
+
+    @Override
+    public void setrAuthor(String author) {
+
+    }
+
+    @Override
+    public void setrBody(String body) {
+
+    }
+
+    @Override
+    public void setrId(String id) {
+
+    }
+
+    @Override
+    public void setrUrl(String url) {
+
     }
 
     public String gettName() {
