@@ -129,9 +129,7 @@ public class MovieAdapter extends CursorAdapter {
                 MoviesContract.FavMovieEntry.COLUMN_MOVIE_ID + " = ?",
                 new String[]{movieKey}, null
         );
-        if (favMovieCursor.moveToFirst()) {
-            int favMovieIdIndex = favMovieCursor.getColumnIndex(MoviesContract.FavMovieEntry._ID);
-        } else {
+        if (!favMovieCursor.moveToFirst()) {
             //inserting
             ContentValues favMovieValues = new ContentValues();
             favMovieValues.put(MoviesContract.FavMovieEntry.COLUMN_MOVIE_ID, movieKey);

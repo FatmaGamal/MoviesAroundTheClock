@@ -133,13 +133,13 @@ public class MoviesProvider extends ContentProvider {
             case MOVIE_RATINGS:
                 return MoviesContract.MovieRatingsEntry.CONTENT_TYPE;
             case MOVIE_FAV:
-                return MoviesContract.MovieRatingsEntry.CONTENT_TYPE;
+                return MoviesContract.FavMovieEntry.CONTENT_TYPE;
             case MOVIE_HIGHEST_RATED_WITH_ID:
                 return MoviesContract.MovieRatingsEntry.CONTENT_ITEM_TYPE;
             case MOVIE_POPULAR_WITH_ID:
                 return MoviesContract.PopularMovieEntry.CONTENT_ITEM_TYPE;
             case MOVIE_FAV_WITH_ID:
-                return MoviesContract.PopularMovieEntry.CONTENT_ITEM_TYPE;
+                return MoviesContract.FavMovieEntry.CONTENT_ITEM_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown " + uri);
@@ -207,8 +207,8 @@ public class MoviesProvider extends ContentProvider {
             case MOVIE_FAV_WITH_ID: {
                 long _id = MoviesContract.MovieRatingsEntry.getMovieIDFromUri(uri);
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        MoviesContract.MovieRatingsEntry.TABLE_NAME, projection,
-                        MoviesContract.MovieRatingsEntry.COLUMN_MOVIE_ID + " = ?",
+                        MoviesContract.FavMovieEntry.TABLE_NAME, projection,
+                        MoviesContract.FavMovieEntry.COLUMN_MOVIE_ID + " = ?",
                         new String[]{Long.toString(_id)}, null, null, sortOrder);
                 break;
             }
@@ -245,9 +245,9 @@ public class MoviesProvider extends ContentProvider {
                 break;
             }
             case MOVIE_FAV: {
-                long _id = db.insert(MoviesContract.MovieRatingsEntry.TABLE_NAME, null, values);
+                long _id = db.insert(MoviesContract.FavMovieEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = MoviesContract.MovieRatingsEntry.buildCertainMovieUri(_id);
+                    returnUri = MoviesContract.FavMovieEntry.buildCertainMovieUri(_id);
                 else
                     throw new android.database.SQLException("Failed " + uri);
                 break;
@@ -277,7 +277,7 @@ public class MoviesProvider extends ContentProvider {
                 rowsDeleted = db.delete(MoviesContract.MovieRatingsEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case MOVIE_FAV:
-                rowsDeleted = db.delete(MoviesContract.MovieRatingsEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = db.delete(MoviesContract.FavMovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown " + uri);
@@ -302,7 +302,7 @@ public class MoviesProvider extends ContentProvider {
                 rowsUpdated = db.update(MoviesContract.MovieRatingsEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             case MOVIE_FAV:
-                rowsUpdated = db.update(MoviesContract.MovieRatingsEntry.TABLE_NAME, values, selection, selectionArgs);
+                rowsUpdated = db.update(MoviesContract.FavMovieEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -324,7 +324,7 @@ public class MoviesProvider extends ContentProvider {
             case MOVIE_RATINGS:
                 return bulkInsertHelper(MoviesContract.MovieRatingsEntry.TABLE_NAME, db, values, uri);
             case MOVIE_FAV:
-                return bulkInsertHelper(MoviesContract.MovieRatingsEntry.TABLE_NAME, db, values, uri);
+                return bulkInsertHelper(MoviesContract.FavMovieEntry.TABLE_NAME, db, values, uri);
             default:
                 return super.bulkInsert(uri, values);
         }
