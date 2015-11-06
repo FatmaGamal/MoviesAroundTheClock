@@ -5,7 +5,6 @@
     tools:context="com.example.android.moviesaroundtheclock.MovieFragment">
 <GridView
     android:id="@+id/movies_gridview"
-    android:columnWidth="120dp"
     android:numColumns="auto_fit"
     android:verticalSpacing="0dp"
     android:horizontalSpacing="0dp"

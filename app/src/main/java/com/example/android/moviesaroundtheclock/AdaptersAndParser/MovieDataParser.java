@@ -40,6 +40,7 @@ public class MovieDataParser {
         final String M_ID = "id";
 
         JSONObject movieJson = new JSONObject(movieJsonStr);
+        if(movieJson != null){
         JSONArray movieArray = movieJson.getJSONArray(M_RESULTS);
 
         //Log.v("Parse movieArray.toSt", movieArray.toString());
@@ -114,6 +115,7 @@ public class MovieDataParser {
                 }
                 Log.d("grid", "FetchMoviesTask complete " + inserted + " inserted");
             }
+        }
         }
         return null;
     }

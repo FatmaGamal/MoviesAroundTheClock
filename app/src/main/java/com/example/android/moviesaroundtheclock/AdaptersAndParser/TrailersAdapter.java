@@ -54,7 +54,7 @@ public class TrailersAdapter extends ArrayAdapter<Extra> {
             recycledView = View.inflate(getContext(), R.layout.movieitem_listview_trailers, null);
             holder = new ViewHolderItem();
             holder.name = (TextView) recycledView.findViewById(R.id.trailer_name_textview);
-            holder.key = (TextView) recycledView.findViewById(R.id.trailer_key_textview);
+            //holder.key = (TextView) recycledView.findViewById(R.id.trailer_key_textview);
 
             recycledView.setTag(holder);
         }
@@ -63,7 +63,6 @@ public class TrailersAdapter extends ArrayAdapter<Extra> {
         if (t != null) {
 
             holder.name.setText(t.gettName());
-            holder.key.setText(t.gettKey());
             final String key = t.gettKey();
 
             recycledView.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +80,7 @@ public class TrailersAdapter extends ArrayAdapter<Extra> {
 
     public static class ViewHolderItem {
         TextView name;
-        TextView key;
+        //TextView key;
     }
 
 

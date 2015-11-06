@@ -53,7 +53,7 @@ public class ReviewsAdapter extends ArrayAdapter<Extra> {
             holder = new ViewHolderItem();
             holder.author = (TextView)recycledView.findViewById(R.id.review_author_textview);
             holder.review = (TextView)recycledView.findViewById(R.id.review_body_textview);
-            holder.url = (TextView)recycledView.findViewById(R.id.review_url_textview);
+            //holder.url = (TextView)recycledView.findViewById(R.id.review_url_textview);
             recycledView.setTag(holder);
         }
 
@@ -61,7 +61,7 @@ public class ReviewsAdapter extends ArrayAdapter<Extra> {
         if (r != null) {
             holder.author.setText(r.getrAuthor());
             holder.review.setText(r.getrBody());
-            holder.url.setText(r.getrUrl());
+            //holder.url.setText(r.getrUrl());
 
         }
 
@@ -72,7 +72,7 @@ public class ReviewsAdapter extends ArrayAdapter<Extra> {
     public static class ViewHolderItem {
         TextView author;
         TextView review;
-        TextView url;
+        //TextView url;
 
     }
 
