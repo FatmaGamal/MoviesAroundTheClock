@@ -97,23 +97,23 @@ public class MovieDataParser {
             }
             cVVector.add(movieValues);
 
-//
-//            int inserted = 0;
-//            if (cVVector.size() > 0) {
-//                ContentValues[] cVArray = new ContentValues[cVVector.size()];
-//                cVVector.toArray(cVArray);
-//                switch (sortby) {
-//                    case MoviesContract.POPULARITY: {
-//                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.PopularMovieEntry.CONTENT_URI, cVArray);
-//                        break;
-//                    }
-//                    case MoviesContract.HIGHEST_RATED: {
-//                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.MovieRatingsEntry.CONTENT_URI, cVArray);
-//                        break;
-//                    }
-//                }
-//                Log.d("grid", "FetchMoviesTask complete " + inserted + " inserted");
-//            }
+
+            int inserted = 0;
+            if (cVVector.size() > 0) {
+                ContentValues[] cVArray = new ContentValues[cVVector.size()];
+                cVVector.toArray(cVArray);
+                switch (sortby) {
+                    case MoviesContract.POPULARITY: {
+                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.PopularMovieEntry.CONTENT_URI, cVArray);
+                        break;
+                    }
+                    case MoviesContract.HIGHEST_RATED: {
+                        inserted = FetchMovieTask.mContext.getContentResolver().bulkInsert(MoviesContract.MovieRatingsEntry.CONTENT_URI, cVArray);
+                        break;
+                    }
+                }
+                Log.d("grid", "FetchMoviesTask complete " + inserted + " inserted");
+            }
         }
         return null;
     }

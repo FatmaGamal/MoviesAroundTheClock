@@ -1,10 +1,7 @@
 package com.example.android.moviesaroundtheclock;
 
 import android.annotation.TargetApi;
-import android.app.Activity;/*
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;*/
+import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;

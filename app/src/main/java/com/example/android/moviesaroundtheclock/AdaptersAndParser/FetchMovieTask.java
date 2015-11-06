@@ -116,6 +116,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Extra>> {
                             .build();
                     url = new URL(builtUri.toString());
                     urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setDoOutput(false);
                     urlConnection.setRequestMethod("GET");
                     urlConnection.connect();
                     break;
@@ -173,12 +174,10 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Extra>> {
             switch (type) {
                 case "trailers": {
                     Log.v("FetchMovieTask", "trailers : getting Data");
-                    /*DetailsFragment.trailers = */
                     return MovieDataParser.getTrailersDataFromJson(moviesJsonStr);
                 }
                 case "reviews": {
                     Log.v("FetchMovieTask", "reviews : getting data");
-                    /*DetailsFragment.reviews = */
                     return MovieDataParser.getReviewsDataFromJson(moviesJsonStr);
                 }
                 default: {

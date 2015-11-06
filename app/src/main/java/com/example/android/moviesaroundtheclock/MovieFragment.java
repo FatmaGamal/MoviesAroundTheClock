@@ -146,8 +146,12 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
             Log.v("MovieFragment", "after asyncTask executes");
             movieList.setAdapter(mMovieAdapter);
             Log.v("MovieFragment", "after mMovieAdapter was updated by FetchMovieTask");
-            getLoaderManager().restartLoader(MOVIES_LOADER, null, this);        //don't know why this is an error
+
+        if (getLoaderManager().getLoader(MOVIES_LOADER) != null) {
+            if (getLoaderManager().getLoader(MOVIES_LOADER).isStarted())
+                getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
             Log.v("MovieFragment", "after loader was restarted");
+        }
 
     }
 

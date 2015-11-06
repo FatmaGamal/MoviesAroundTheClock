@@ -66,7 +66,7 @@ public class MovieAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         Log.v("MovieAdapter", "entered in bindView");
-        ViewHolderItem holder = (ViewHolderItem) view.getTag();
+        final ViewHolderItem holder = (ViewHolderItem) view.getTag();
 
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -84,9 +84,11 @@ public class MovieAdapter extends CursorAdapter {
                     if (checkFav(movieId)) {
                         Log.d("grid", "already in favorites, so remove");
                         removeFav(movieId);
+                        holder.favBtn.setText(R.string.add_to_favourites);
                     } else {
                         Log.d("grid", "not in favorites, so add");
                         addFav(movieId, name, overview, poster, vote, date);
+                        holder.favBtn.setText(R.string.remove_from_favourites);
                     }
                 }
             });
@@ -119,8 +121,7 @@ public class MovieAdapter extends CursorAdapter {
 
     }
 
-    public long addFav(String movieKey, String title, String overview, String posterPath, double voteAverage, String releaseDate) {
-        long favMovieId;
+    public void addFav(String movieKey, String title, String overview, String posterPath, double voteAverage, String releaseDate) {
         //check if already exists
         Cursor favMovieCursor = mContext.getContentResolver().query(
                 MoviesContract.FavMovieEntry.CONTENT_URI,
@@ -130,7 +131,6 @@ public class MovieAdapter extends CursorAdapter {
         );
         if (favMovieCursor.moveToFirst()) {
             int favMovieIdIndex = favMovieCursor.getColumnIndex(MoviesContract.FavMovieEntry._ID);
-            favMovieId = favMovieCursor.getLong(favMovieIdIndex);
         } else {
             //inserting
             ContentValues favMovieValues = new ContentValues();
@@ -142,10 +142,8 @@ public class MovieAdapter extends CursorAdapter {
             favMovieValues.put(MoviesContract.FavMovieEntry.COLUMN_RELEASE_DATE, releaseDate);
 
             Uri insertedUri = mContext.getContentResolver().insert(MoviesContract.FavMovieEntry.CONTENT_URI, favMovieValues);
-            favMovieId = ContentUris.parseId(insertedUri);
         }
         favMovieCursor.close();
-        return favMovieId;
     }
 
     public static class ViewHolderItem {

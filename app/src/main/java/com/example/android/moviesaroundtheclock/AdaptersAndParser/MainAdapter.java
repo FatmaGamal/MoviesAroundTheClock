@@ -57,7 +57,6 @@ public class MainAdapter extends CursorAdapter {
             case MoviesContract.FAVORITE :
                 index = cursor.getColumnIndex(MoviesContract.FavMovieEntry.COLUMN_POSTER_PATH);
         }
-        //String poster = cursor.getString(MovieFragment.COL_POSTER_PATH);
         String poster = cursor.getString(index);
         Picasso.with(context).load("http://image.tmdb.org/t/p/w185/" + poster).into(holder.img);
         Log.v("MainAdapter", "finished loading");

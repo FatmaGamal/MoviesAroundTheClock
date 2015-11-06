@@ -90,11 +90,13 @@ public class MoviesProvider extends ContentProvider {
                 new String[]{MoviesContract.FavMovieEntry._ID},
                 MoviesContract.FavMovieEntry.COLUMN_MOVIE_ID + " = ?",
                 new String[]{movieKey}, null);
-        if(retCursor.isNull(retCursor.getColumnIndex(MoviesContract.FavMovieEntry._ID)))
-            isFavorite = true;
+        if (retCursor.moveToFirst() && retCursor.getCount() >= 1) {
+            if (!retCursor.isNull(retCursor.getColumnIndex(MoviesContract.FavMovieEntry._ID)))
+                isFavorite = true;
+        }
 
         return isFavorite;
-        }
+    }
 
     static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
