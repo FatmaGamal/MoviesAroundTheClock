@@ -29,9 +29,9 @@ public class MainActivity  extends ActionBarActivity implements MovieFragment.Ca
             // adding or replacing the detail fragment using a
             // fragment transaction.
             if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
+                /*getSupportFragmentManager().beginTransaction()
                         .replace(R.id.movie_detail_container, new DetailsFragment())
-                        .commit();
+                        .commit();*/
             }
         } else {
             mTwoPane = false;

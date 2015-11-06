@@ -94,7 +94,7 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_details, null, false);
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(URI_ARG);
@@ -118,7 +118,7 @@ public class DetailsFragment extends Fragment {
             switch (sortby) {
                 case MoviesContract.POPULARITY: {
                     movieId = String.valueOf(MoviesContract.PopularMovieEntry.getMovieIDFromUri(mUri));
-                    Log.v("DetailsFragment", "Popular : movieId to get the row id from = " + movieId);
+                    //Log.v("DetailsFragment", "Popular : movieId to get the row id from = " + movieId);
                     cursor = getActivity().getContentResolver().query(MoviesContract.PopularMovieEntry.CONTENT_URI,
                             null,
                             MoviesContract.PopularMovieEntry._ID + " = ?",
@@ -130,7 +130,7 @@ public class DetailsFragment extends Fragment {
                 }
                 case MoviesContract.HIGHEST_RATED: {
                     movieId = String.valueOf(MoviesContract.MovieRatingsEntry.getMovieIDFromUri(mUri));
-                    Log.v("DetailsFragment", "Ratings : movieId to get the row id from = " + movieId);
+                    //Log.v("DetailsFragment", "Ratings : movieId to get the row id from = " + movieId);
                     cursor = getActivity().getContentResolver().query(MoviesContract.MovieRatingsEntry.CONTENT_URI,
                             null,
                             MoviesContract.MovieRatingsEntry._ID + " = ?",
@@ -141,7 +141,7 @@ public class DetailsFragment extends Fragment {
                 }
             }
         }
-
+if (movieId != null){
         try {
             FetchMovieTask task = new FetchMovieTask(movieKey, "trailers");
             task.execute(sortby);
@@ -152,6 +152,7 @@ public class DetailsFragment extends Fragment {
         } catch (Exception ex) {
             Log.v("MovieDataParser", "error in task execution");
         }
+}
         trailers = new ArrayList<Extra>();
         reviews = new ArrayList<Extra>();
 
@@ -162,9 +163,9 @@ public class DetailsFragment extends Fragment {
 
         MergeAdapter mergeAdapter = new MergeAdapter();
         mergeAdapter.addAdapter(new MovieAdapter(getActivity(), cursor, 0));
-        mergeAdapter.addView(LayoutInflater.from(getActivity()).inflate(R.layout.movieitem_listview_headers_trailers, container, false));
+        mergeAdapter.addView(LayoutInflater.from(getActivity()).inflate(R.layout.movieitem_listview_headers_trailers, null, false));
         mergeAdapter.addAdapter(trailerAdapter);
-        mergeAdapter.addView(LayoutInflater.from(getActivity()).inflate(R.layout.movieitem_listview_headers_reviews, container, false));
+        mergeAdapter.addView(LayoutInflater.from(getActivity()).inflate(R.layout.movieitem_listview_headers_reviews, null, false));
         mergeAdapter.addAdapter(reviewAdapter);
         detailsList.setAdapter(mergeAdapter);
 

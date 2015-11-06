@@ -80,8 +80,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         updateMovieList();
         movieList.setAdapter(mMovieAdapter);
         Log.v("MovieFragment", "movieAdapter set to gridLayout");
-        movieList.setSelection(0);
-        Log.v("MovieFragment", "selection of item set to 0");
+
 
         movieList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -224,6 +223,8 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mPosition != GridView.INVALID_POSITION) {
             movieList.smoothScrollToPosition(mPosition);
         }
+        movieList.setSelection(0);
+        Log.v("MovieFragment", "selection of item set to 0");
     }
 
     @Override
