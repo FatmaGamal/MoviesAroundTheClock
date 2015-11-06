@@ -138,6 +138,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         updateMovieList();   }
 
     private void updateMovieList() {
+            sortby = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.movie_sort_key), getString(R.string.movie_sort_default));
         if (sortby != MoviesContract.FAVORITE) {
             asyncTask = new FetchMovieTask(getActivity());
             Log.v("MovieFragment", "before asyncTask executes");
